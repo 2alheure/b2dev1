@@ -18,8 +18,18 @@
 
     <p>Le nombre vaut {{ nombre }}</p>
 
+    <h2>Tous les nombres de 1 à {{ nombre }}</h2>
+
+    {% for n in 1..nombre %}
+        <p>{{ n }}</p>
+    {% endfor %}
+
+    <h2>Informations sur une personne</h2>
+
     <p>Bonjour, {{ personne.prenom }} {{ personne.nom }}. Vous avez {{ personne.age }} ans.</p>
 
     {# Ceci est un commentaire. #}
+
+
 </body>
 </html>

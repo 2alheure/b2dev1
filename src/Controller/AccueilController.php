@@ -14,7 +14,7 @@ class AccueilController extends AbstractController {
     public function afficherAccueil(Request $request): Response {
         $n = rand(1, 10);
 
-        $obj = new stdClass();
+        $obj = new stdClass(); // Une classe "générique"
         $obj->nom = "Dupont";
         $obj->prenom = "Jean";
         $obj->age = 35;

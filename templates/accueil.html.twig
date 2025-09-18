@@ -9,5 +9,17 @@
     <h1>Accueil</h1>
 
     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sequi perspiciatis non numquam eaque ea, laboriosam explicabo. Quas iure sit perferendis natus quod aliquid earum nam eos, vel velit corrupti sequi?</p>
+
+    {% if nombre > 5 %}
+        <p>Le nombre est supérieur à 5</p>
+    {% else %}
+        <p>Le nombre est inférieur ou égal à 5</p>
+    {% endif %}
+
+    <p>Le nombre vaut {{ nombre }}</p>
+
+    <p>Bonjour, {{ personne.prenom }} {{ personne.nom }}. Vous avez {{ personne.age }} ans.</p>
+
+    {# Ceci est un commentaire. #}
 </body>
 </html>

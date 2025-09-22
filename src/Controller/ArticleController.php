@@ -3,40 +3,37 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 
 final class ArticleController extends AbstractController {
-    #[Route('/articles/create', name: 'app_article')]
-    public function index(EntityManagerInterface $em): Response {
+    #[Route('/articles/create', name: 'app_article_create')]
+    public function index(EntityManagerInterface $em, Request $request): Response {
 
-        /**
-         * $em est une instance de EntityManagerInterface
-         * On le reçoit en argument de la méthode index()
-         * grâce au mécanisme d'injection de dépendances de Symfony
-         */
+        $article = new Article(); // On crée un nouvel article vide
+        $form = $this->createForm(ArticleType::class, $article); // On crée le formulaire en lui passant l'article vide
 
-        // Création de 10 000 articles
-        for ($i = 0; $i < 10000; $i++) {
-            $article = new Article();
-            $article->setTitre('Mon article n° ' . $i);
-            $article->setDate(new \DateTime());
-            $article->setImg('https://via.placeholder.com/150');
-            $article->setContenu('Ceci est le contenu de mon article n° ' . $i . '.');
+        // On "hydrate" le formulaire avec les données de la requête
+        // (Le formulaire gère la requête tout seul)
+        $form->handleRequest($request);
 
-            // On "persiste" l'article
-            // On prépare un INSERT INTO
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Si le formulaire a été soumis et que les données sont valides, on enregistre l'article
             $em->persist($article);
+            $em->flush();
+
+            return $this->redirectToRoute('app_article_list');
         }
 
-        // On exécute les requêtes
-        // On "tire la chasse"
-        $em->flush();
-
-        return new Response('Article créé');
+        // Si on n'a pas soumis le formulaire, on affiche la vue avec le formulaire
+        return $this->render('article/create.html.twig', [
+            'form' => $form
+        ]);
     }
 
     #[Route('/articles/remove', name: 'app_article_remove')]
@@ -64,7 +61,7 @@ final class ArticleController extends AbstractController {
         $articles = $ar->findAll(); // On récupère tous les articles en base de données
 
         // Puis on les passe à la vue pour affichage
-        return $this->render('article/list.html.twig', [
+        return $this->render('article/index.html.twig', [
             'articles' => $articles
         ]);
     }

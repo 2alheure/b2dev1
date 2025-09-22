@@ -13,6 +13,13 @@ final class ArticleController extends AbstractController {
     #[Route('/articles/create', name: 'app_article')]
     public function index(EntityManagerInterface $em): Response {
 
+        /**
+         * $em est une instance de EntityManagerInterface
+         * On le reçoit en argument de la méthode index()
+         * grâce au mécanisme d'injection de dépendances de Symfony
+         */
+
+        // Création de 10 000 articles
         for ($i = 0; $i < 10000; $i++) {
             $article = new Article();
             $article->setTitre('Mon article n° ' . $i);
@@ -20,9 +27,13 @@ final class ArticleController extends AbstractController {
             $article->setImg('https://via.placeholder.com/150');
             $article->setContenu('Ceci est le contenu de mon article n° ' . $i . '.');
 
+            // On "persiste" l'article
+            // On prépare un INSERT INTO
             $em->persist($article);
         }
 
+        // On exécute les requêtes
+        // On "tire la chasse"
         $em->flush();
 
         return new Response('Article créé');
@@ -39,5 +50,22 @@ final class ArticleController extends AbstractController {
         $em->flush();
 
         return new Response('Articles supprimés');
+    }
+
+    #[Route('/articles', name: 'app_article_list')]
+    function list(ArticleRepository $ar): Response {
+
+        /**
+         * $ar est une instance de ArticleRepository
+         * On le reçoit en argument de la méthode list() 
+         * grâce au mécanisme d'injection de dépendances de Symfony
+         */
+
+        $articles = $ar->findAll(); // On récupère tous les articles en base de données
+
+        // Puis on les passe à la vue pour affichage
+        return $this->render('article/list.html.twig', [
+            'articles' => $articles
+        ]);
     }
 }

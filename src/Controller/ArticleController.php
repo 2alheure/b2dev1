@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ArticleController extends AbstractController {
     #[Route('/articles/create', name: 'app_article_create')]
@@ -47,6 +48,19 @@ final class ArticleController extends AbstractController {
         $em->flush();
 
         return new Response('Articles supprimés');
+    }
+
+    #[Route('/articles/{id}', name: 'app_article_details')]
+    public function details($id, ArticleRepository $ar) {
+        $article = $ar->find($id);
+
+        if (empty($article)) {
+            throw new NotFoundHttpException;
+        }
+
+        return $this->render('article/details.html.twig', [
+            'article' => $article
+        ]);
     }
 
     #[Route('/articles', name: 'app_article_list')]

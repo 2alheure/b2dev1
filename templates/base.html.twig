@@ -26,6 +26,16 @@
 			</nav>
 		</header>
 
+		{% for key, messages in app.flashes %}
+			{% for value in messages %}
+				<p class="bg-gray-50 text-center border shadow m-4">
+					<b>{{ key }}</b>&nbsp;:
+					{{ value }}
+				</p>
+			{% endfor %}
+		{% endfor %}
+
+
 		{% block body %}{% endblock %}
 
 		<footer class="text-center">

@@ -21,6 +21,10 @@ class AccueilController extends AbstractController {
 
         $this->getUser(); // Entité User ou null si pas connecté
 
+        if (!rand(0,4)) {
+            // On ajoute une session flash (clef, valeur)
+            $this->addFlash('success', 'Joli succès !');
+        }
 
         return $this->render('accueil.html.twig', [
             'nombre' => $n,

@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AccueilController extends AbstractController {
 
-    #[Route('/accueil')]
+    #[Route('/accueil', name: 'app_home')]
     public function afficherAccueil(Request $request): Response {
         $n = rand(1, 10);
 
@@ -18,6 +18,8 @@ class AccueilController extends AbstractController {
         $obj->nom = "Dupont";
         $obj->prenom = "Jean";
         $obj->age = 35;
+
+        $this->getUser(); // Entité User ou null si pas connecté
 
 
         return $this->render('accueil.html.twig', [

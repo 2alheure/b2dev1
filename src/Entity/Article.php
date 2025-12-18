@@ -26,6 +26,10 @@ class Article
     #[ORM\Column(type: Types::TEXT)]
     private ?string $contenu = null;
 
+    #[ORM\ManyToOne(inversedBy: 'articles')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +79,18 @@ class Article
     public function setContenu(string $contenu): static
     {
         $this->contenu = $contenu;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

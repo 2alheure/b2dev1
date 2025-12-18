@@ -25,6 +25,11 @@ final class ArticleController extends AbstractController {
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Si le formulaire a été soumis et que les données sont valides, on enregistre l'article
+
+            $article->setUser(
+                $this->getUser()
+            );
+
             $em->persist($article);
             $em->flush();
 

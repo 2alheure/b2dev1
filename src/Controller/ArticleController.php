@@ -6,10 +6,11 @@ use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class ArticleController extends AbstractController {
@@ -29,6 +30,14 @@ final class ArticleController extends AbstractController {
             $article->setUser(
                 $this->getUser()
             );
+
+            $file = $form->get('img')->getData();
+            $nom = 'article-' . uniqid() . '.' . $file->guessExtension();
+
+            // On déplace le fichier
+            $file->move(__DIR__ . '/../../public/img/articles', $nom);
+
+            $article->setImg($nom);
 
             $em->persist($article);
             $em->flush();

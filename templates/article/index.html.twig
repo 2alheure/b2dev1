@@ -13,7 +13,7 @@
 				<div class="border rounded shadow-lg p-4">
                     <h2>{{ a.titre }}</h2>
                     <p>Ecrit le {{ a.date|date('d/m/Y') }}</p>
-                    <img src="{{ a.img }}" alt="" class="size-24 object-contain">
+                    <img src="{{ asset('img/articles/' ~ a.img) }}" alt="" class="size-24 object-contain">
                 </div>
 			{% endfor %}
 		</div>
